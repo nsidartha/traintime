@@ -38,7 +38,7 @@ $("#addtrain").on("click", function(event) {
       .trim(),
     "HH:mm"
   )
-    .subtract(10, "years")
+    .subtract(11, "years")
     .format("X");
 
   var frequency = $("#frequencyInput")
@@ -65,8 +65,32 @@ $("#addtrain").on("click", function(event) {
   $("#firstTraininput").val("");
   $("#frequencyinput").val("");
 });
-
+//get the data from the database, use moment to get and add the time, and then append to a new row in Current Train Schedule
 database.ref().on("child_added", function(childSnapshot) {
-  
-});
+    console.log(childSnapshot.val());
 
+  var trainName = childSnapshot.val().trainName;
+  var trainDestination = childSnapshot.val().destination;
+  var trainStartTime = childSnapshot.val().firstTrain;
+  var trainFrequency = childSnapshot.val().frequency;
+
+  //going to add trainFrequency with current time to get next train arrival
+  var trainNextArrival;
+
+  //going to take next train arrival and subtract with current time.
+  var trainMinsAway;
+
+  var newRow = $("<tr>").append(
+    $("<td>").text(trainName),
+    $("<td>").text(trainDestination),
+    $("<td>").text(empStartPretty),
+    $("<td>").text(trainFrequency),
+    $("<td>").text(trainNextArrival),
+    $("<td>").text(trainMinsAway)
+  );
+
+  $("#trainList > tbody").append(newRow);
+
+
+
+});
